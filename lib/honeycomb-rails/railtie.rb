@@ -1,4 +1,5 @@
 require 'honeycomb-rails/initializers'
+require 'honeycomb-rails/overrides'
 require 'honeycomb-rails/subscribers'
 
 module HoneycombRails
@@ -11,6 +12,10 @@ module HoneycombRails
 
     initializer 'honeycomb.subscribe_notifications' do
       Subscribers::ProcessAction.new(libhoney).subscribe!
+    end
+
+    initializer 'honeycomb.action_controller_overrides', after: :action_controller do
+      ::ActionController::Instrumentation.prepend(Overrides::ActionControllerInstrumentation)
     end
   end
 end

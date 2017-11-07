@@ -26,6 +26,12 @@ module HoneycombRails
         # Pull top-level attributes off of the ActiveSupport Event.
         data[:duration_ms] = event.duration
 
+        # Add anything we added in our controller-level instrumentation (see
+        # overrides/action_controller_instrumentation.rb)
+        if event.payload.key?(:honeycomb_metadata)
+          data.merge!(event.payload[:honeycomb_metadata])
+        end
+
         @libhoney.send_now(data)
       end
     end

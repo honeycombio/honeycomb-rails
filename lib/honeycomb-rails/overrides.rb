@@ -1,0 +1,1 @@
+require 'honeycomb-rails/overrides/action_controller_instrumentation'
