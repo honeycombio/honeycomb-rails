@@ -4,7 +4,7 @@ module HoneycombRails
       def append_info_to_payload(payload)
         super
 
-        metadata = {}
+        metadata = honeycomb_metadata
 
         # TODO generify this
         if current_user

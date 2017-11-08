@@ -1,3 +1,4 @@
+require 'honeycomb-rails/extensions'
 require 'honeycomb-rails/initializers'
 require 'honeycomb-rails/overrides'
 require 'honeycomb-rails/subscribers'
@@ -14,8 +15,12 @@ module HoneycombRails
       Subscribers::ProcessAction.new(libhoney).subscribe!
     end
 
+    initializer 'honeycomb.action_controller_extensions', after: :action_controller do
+      ::ActionController::Base.include(Extensions::ActionController::InstanceMethods)
+    end
+
     initializer 'honeycomb.action_controller_overrides', after: :action_controller do
-      ::ActionController::Instrumentation.prepend(Overrides::ActionControllerInstrumentation)
+      ::ActionController::Base.include(Overrides::ActionControllerInstrumentation)
     end
   end
 end
