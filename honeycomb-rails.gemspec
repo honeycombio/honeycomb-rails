@@ -18,6 +18,8 @@ TODESCRIBE
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
+  # override the version requirement just for development: we want the testing
+  gem.add_development_dependency 'libhoney', '>= 1.4.0'
 
 
   gem.required_ruby_version = '>= 2.0.0'
