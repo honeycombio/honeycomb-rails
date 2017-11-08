@@ -15,6 +15,9 @@ TODESCRIBE
 
   gem.add_dependency 'libhoney', '>= 1.3.2'
 
+  gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'rspec'
+
 
   gem.required_ruby_version = '>= 2.0.0'
 
