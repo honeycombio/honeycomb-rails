@@ -1,3 +1,6 @@
+require 'active_support/core_ext/hash'
+require 'active_support/notifications'
+
 module HoneycombRails
   module Subscribers
     class ProcessAction
