@@ -52,6 +52,21 @@ RSpec.describe HoneycombRails::Overrides::ActionControllerInstrumentation do
     expect(payload[:honeycomb_metadata]).to include(flash_notice: 'Fired ze missiles.')
   end
 
+  describe 'if config.record_flash is false' do
+    before { HoneycombRails.config.record_flash = false }
+    after { HoneycombRails.reset_config_to_default! }
+
+    it 'does not record the flash' do
+      subject.flash[:error] = 'Invalid email address'
+      subject.flash[:notice] = 'Fired ze missiles.'
+
+      subject.append_info_to_payload(payload)
+
+      expect(payload).to include(:honeycomb_metadata)
+      expect(payload[:honeycomb_metadata]).to_not include(:flash_error, :flash_notice)
+    end
+  end
+
   it 'adds information about the current user if set' do
     subject.current_user = User.new(42, 'test@example.com', true)
 

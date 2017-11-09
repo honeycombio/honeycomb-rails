@@ -1,3 +1,4 @@
+require 'honeycomb-rails/config'
 require 'honeycomb-rails/constants'
 
 module HoneycombRails
@@ -15,9 +16,10 @@ module HoneycombRails
           metadata[:current_user_admin] = current_user.try(:admin?) ? true : false
         end
 
-        # TODO optionalise this
-        metadata[:flash_error] = flash[:error] if flash[:error]
-        metadata[:flash_notice] = flash[:notice] if flash[:notice]
+        if HoneycombRails.config.record_flash?
+          metadata[:flash_error] = flash[:error] if flash[:error]
+          metadata[:flash_notice] = flash[:notice] if flash[:notice]
+        end
 
         # Attach to ActiveSupport::Instrumentation payload for consumption by
         # subscribers/process_action.rb
