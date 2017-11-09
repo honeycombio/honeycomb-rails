@@ -1,3 +1,5 @@
+require 'honeycomb-rails/constants'
+
 module HoneycombRails
   module Overrides
     module ActionControllerInstrumentation
@@ -19,8 +21,7 @@ module HoneycombRails
 
         # Attach to ActiveSupport::Instrumentation payload for consumption by
         # subscribers/process_action.rb
-        # TODO constantify this
-        payload[:honeycomb_metadata] = metadata
+        payload[Constants::EVENT_METADATA_KEY] = metadata
       end
     end
   end

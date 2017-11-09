@@ -1,3 +1,5 @@
+require 'honeycomb-rails/constants'
+
 require 'active_support/core_ext/hash'
 require 'active_support/notifications'
 
@@ -31,8 +33,8 @@ module HoneycombRails
 
         # Add anything we added in our controller-level instrumentation (see
         # overrides/action_controller_instrumentation.rb)
-        if event.payload.key?(:honeycomb_metadata)
-          data.merge!(event.payload[:honeycomb_metadata])
+        if event.payload.key?(Constants::EVENT_METADATA_KEY)
+          data.merge!(event.payload[Constants::EVENT_METADATA_KEY])
         end
 
         @libhoney.send_now(data)
