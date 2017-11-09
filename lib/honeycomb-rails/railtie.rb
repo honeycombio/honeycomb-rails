@@ -23,7 +23,13 @@ module HoneycombRails
     end
 
     config.after_initialize do
-      Subscribers::ProcessAction.new(@libhoney).subscribe!
+      db_builder = @libhoney.builder
+      db_builder.dataset = HoneycombRails.config.db_dataset
+
+      [
+        Subscribers::ProcessAction.new(@libhoney),
+        Subscribers::ActiveRecord.new(db_builder),
+      ].each(&:subscribe!)
     end
   end
 end

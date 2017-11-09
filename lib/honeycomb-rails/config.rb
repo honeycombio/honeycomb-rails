@@ -2,6 +2,7 @@ module HoneycombRails
   class Config
     def initialize
       @dataset = 'rails'
+      @db_dataset = 'active_record'
       @record_flash = true
       @record_user = :detect
     end
@@ -14,6 +15,7 @@ module HoneycombRails
     attr_accessor :record_user
 
     attr_accessor :dataset
+    attr_accessor :db_dataset
     attr_accessor :writekey
   end
 
