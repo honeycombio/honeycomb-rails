@@ -9,12 +9,7 @@ module HoneycombRails
 
         metadata = honeycomb_metadata
 
-        # TODO generify this
-        if current_user
-          metadata[:current_user_id] = current_user.id
-          metadata[:current_user_email] = current_user.email
-          metadata[:current_user_admin] = current_user.try(:admin?) ? true : false
-        end
+        metadata.merge!(honeycomb_user_metadata)
 
         if HoneycombRails.config.record_flash?
           metadata[:flash_error] = flash[:error] if flash[:error]
@@ -24,6 +19,42 @@ module HoneycombRails
         # Attach to ActiveSupport::Instrumentation payload for consumption by
         # subscribers/process_action.rb
         payload[Constants::EVENT_METADATA_KEY] = metadata
+      end
+
+      def honeycomb_user_metadata
+        case HoneycombRails.config.record_user
+        when :detect
+          honeycomb_detect_user_methods!
+          honeycomb_user_metadata
+        when :devise
+          honeycomb_user_metadata_devise
+        when nil, false
+          {}
+        else
+          raise "Invalid value for HoneycombRails.config.record_user: #{HoneycombRails.config.record_user.inspect}"
+        end
+      end
+
+      def honeycomb_user_metadata_devise
+        if current_user
+          {
+            current_user_id: current_user.id,
+            current_user_email: current_user.email,
+            current_user_admin: !!current_user.try(:admin?),
+          }
+        else
+          {}
+        end
+      end
+
+      def honeycomb_detect_user_methods!
+        if respond_to?(:current_user)
+          # This could be more sophisticated, but it'll do for now
+          HoneycombRails.config.record_user = :devise
+        else
+          logger.error "HoneycombRails.config.record_user = :detect but couldn't detect user methods; disabling user recording."
+          HoneycombRails.config.record_user = false
+        end
       end
     end
   end
