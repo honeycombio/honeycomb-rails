@@ -1,6 +1,7 @@
 module HoneycombRails
   class Config
     def initialize
+      @dataset = 'rails'
       @record_flash = true
       @record_user = :detect
     end
@@ -11,6 +12,9 @@ module HoneycombRails
     end
 
     attr_accessor :record_user
+
+    attr_accessor :dataset
+    attr_accessor :writekey
   end
 
   class << self
