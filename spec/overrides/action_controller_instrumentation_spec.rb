@@ -163,5 +163,22 @@ RSpec.describe HoneycombRails::Overrides::ActionControllerInstrumentation do
         expect(payload[:honeycomb_metadata]).to_not include(:current_user_id, :current_user_email, :current_user_admin)
       end
     end
+
+    describe 'if config.record_user is a block' do
+      before do
+        HoneycombRails.config.record_user = ->(controller) {
+          {logged_in: !!controller.current_user}
+        }
+      end
+
+      it 'runs the block on the controller instance to populate the metadata' do
+        subject.current_user = User.new(42, 'test@example.com', true)
+
+        subject.append_info_to_payload(payload)
+
+        expect(payload).to include(:honeycomb_metadata)
+        expect(payload[:honeycomb_metadata]).to include(logged_in: true)
+      end
+    end
   end
 end

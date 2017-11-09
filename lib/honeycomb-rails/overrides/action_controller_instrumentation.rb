@@ -22,12 +22,19 @@ module HoneycombRails
       end
 
       def honeycomb_user_metadata
+        if defined?(@honeycomb_user_proc)
+          return @honeycomb_user_proc.call(self)
+        end
+
         case HoneycombRails.config.record_user
         when :detect
           honeycomb_detect_user_methods!
           honeycomb_user_metadata
         when :devise
           honeycomb_user_metadata_devise
+        when Proc
+          @honeycomb_user_proc = HoneycombRails.config.record_user
+          honeycomb_user_metadata
         when nil, false
           {}
         else
