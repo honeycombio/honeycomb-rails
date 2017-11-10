@@ -10,31 +10,31 @@ module HoneycombRails
       @record_user = :detect
     end
 
-    # Whether to record flash messages.
+    # Whether to record flash messages (default: true).
     attr_writer :record_flash
-    # Whether to record flash messages.
+    # Whether to record flash messages (default: true).
     def record_flash?
       !!@record_flash
     end
 
-    # If set, determines how to record the current user during request processing. Set to `nil` or `false` to disable.
+    # If set, determines how to record the current user during request processing (default: :detect). Set to nil or false to disable.
     #
     # Valid values:
     #
-    #  * `:devise` - if your app uses Devise for authentication
-    #  * `:detect` - autodetect how to determine the current user
-    #  * `nil`, `false` - disable recording current user
+    # * :devise - if your app uses Devise for authentication
+    # * :detect - autodetect how to determine the current user
+    # * nil, false - disable recording current user
     #
     # You can also pass a Proc, which will be called with the current controller
     # instance during each request, and which should return a hash of metadata
     # about the current user.
     attr_accessor :record_user
 
-    # The Honeycomb dataset to send request events to.
+    # The Honeycomb dataset to send request events to (default: 'rails').
     attr_accessor :dataset
-    # The Honeycomb dataset to send ActiveRecord query events to.
+    # The Honeycomb dataset to send ActiveRecord query events to (default: 'active_record').
     attr_accessor :db_dataset
-    # The Honeycomb write key for your team.
+    # The Honeycomb write key for your team (must be specified).
     attr_accessor :writekey
   end
 
