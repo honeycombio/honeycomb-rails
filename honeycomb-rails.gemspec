@@ -1,10 +1,13 @@
 Gem::Specification.new do |gem|
   gem.name = 'honeycomb-rails'
-  gem.version = '0.0.1'
+  gem.version = '0.1.0'
 
-  gem.summary = 'TOSUMMARISE'
+  gem.summary = 'Easily instrument your Rails apps with Honeycomb'
   gem.description = <<-DESC
-TODESCRIBE
+    Get fine-grained visibility into the behaviour and performance of your
+    Rails web app. This gem instruments your app to send events to Honeycomb
+    (https://honeycomb.io) each time it processes an HTTP request or makes a
+  database query.
   DESC
 
   gem.authors = ['Sam Stokes', 'Christine Yen']
