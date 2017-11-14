@@ -16,7 +16,7 @@ Then create a file in your application repo called `config/initializers/honeycom
 HoneycombRails.configure do |conf|
   conf.writekey = 'your honeycomb writekey here'
   conf.dataset = 'your app name'
-  conf.db_dataset = 'activerecord'
+  conf.db_dataset = 'your app name-activerecord'
 end
 ```
 
@@ -28,11 +28,13 @@ See [docs](http://www.rubydoc.info/gems/honeycomb-rails/HoneycombRails/Config) f
 
 ## Documentation
 
-An API reference is available at http://www.rubydoc.info/gems/libhoney
+See [rubydoc](http://www.rubydoc.info/gems/honeycomb-rails/) for gem documentation.
+
+An API reference for the underlying libhoney gem is available at http://www.rubydoc.info/gems/libhoney
 
 ## Contributions
 
-Features, bug fixes and other changes to libhoney are gladly accepted. Please
+Features, bug fixes and other changes are gladly accepted. Please
 open issues or a pull request with your change. Remember to add your name to the
 CONTRIBUTORS file!
 
