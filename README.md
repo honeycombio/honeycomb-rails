@@ -30,8 +30,6 @@ See [docs](http://www.rubydoc.info/gems/honeycomb-rails/HoneycombRails/Config) f
 
 See [rubydoc](http://www.rubydoc.info/gems/honeycomb-rails/) for gem documentation.
 
-An API reference for the underlying libhoney gem is available at http://www.rubydoc.info/gems/libhoney
-
 ## Contributions
 
 Features, bug fixes and other changes are gladly accepted. Please
