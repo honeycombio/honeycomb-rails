@@ -22,7 +22,8 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'yard'
-  # override the version requirement just for development: we want the testing
+  # override libhoney version requirement just for development: we want the
+  # testing support in the newer version
   gem.add_development_dependency 'libhoney', '>= 1.4.0'
 
 
