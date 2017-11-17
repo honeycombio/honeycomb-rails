@@ -19,6 +19,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'libhoney', '>= 1.3.2'
   gem.add_dependency 'rails', '>= 3.0.0'
 
+  gem.add_development_dependency 'bump'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'yard'
