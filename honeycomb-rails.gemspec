@@ -4,7 +4,7 @@ Gem::Specification.new do |gem|
 
   gem.summary = 'Easily instrument your Rails apps with Honeycomb'
   gem.description = <<-DESC
-    Get fine-grained visibility into the behaviour and performance of your
+    Get fine-grained visibility into the behavior and performance of your
     Rails web app. This gem instruments your app to send events to Honeycomb
     (https://honeycomb.io) each time it processes an HTTP request or makes a
   database query.
