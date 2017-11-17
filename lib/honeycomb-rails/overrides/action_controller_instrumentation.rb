@@ -12,8 +12,9 @@ module HoneycombRails
         metadata.merge!(honeycomb_user_metadata)
 
         if HoneycombRails.config.record_flash?
-          metadata[:flash_error] = flash[:error] if flash[:error]
-          metadata[:flash_notice] = flash[:notice] if flash[:notice]
+          flash.each do |k, v|
+            metadata[:"flash_#{k}"] = v
+          end
         end
 
         # Attach to ActiveSupport::Instrumentation payload for consumption by
