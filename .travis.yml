@@ -3,3 +3,12 @@ rvm:
   - 2.2
   - 2.3
   - 2.4
+deploy:
+  provider: rubygems
+  api_key:
+    secure: "kGz7fufw4gaKFJRC4vfGaQUWUFXoWw/hKitWarjte+ca96X2uG+deRmk/QptIdtQFWKySoXgltXLXTJiabnHFy4IPoQiNxXefiVSBFExRSBbjKmVi1y/iLbVMPTvq41bs0/4CmlHc3w4Rdo5wOT9GBxropQrW/YjBNWR9tdruT8wU2UuBo8EZhw94GwUOzVHQl+Z7s7gtVbeaMin6r2rI7M4dQmDoqfLRnVAPR7tw50X+iLtnSk2Gi/W78xHUIzxSYFxjn68DhzNN5mj8qOWBcisWpdGCxZtin9n8lzshce0XcFP3xxTM9AYhVRdjg1SI+z9Z/qFdpFyxzCUIjcTGNavwPFcr5l+0mhW5yslnw0jqydft9NmiTuzO8D6J6LRsroLBvu9biwXldqbTPTjPfufEHjy+TYmOhcsOk+yabk6yxl2FkxOalYBw/fHVQ1o5kS9FTEaBSXDO70ewIzNxKHzhBJvsF2XhAt3TXyX/zgAFgPGWEzmTJaIZWV08QmS9OQR1G8WqXJ+szNIIaRLPdwfRAcCbjwaRp+96cgnKJ3R+MUjLz84rD2q/HQxGkvqXVyQW4KQolGbhJZA8IYeOMYZy9MjnLO4po8PWxYqHPBDAm3Yp5qPYOM5PeaKyLLsPo1hgVvfhG1CBKbXF4hci2lB/fmNzjclKPdDvZcYw3c="
+  gem: honeycomb-rails
+  on:
+    tags: true
+    repo: honeycombio/honeycomb-rails
+    ruby: '2.4'
