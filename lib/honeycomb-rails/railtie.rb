@@ -18,18 +18,25 @@ module HoneycombRails
     # the app's config/initializers has taken effect.
     config.after_initialize do
       writekey = HoneycombRails.config.writekey
-      dataset = HoneycombRails.config.dataset
-      @libhoney = Libhoney::Client.new(writekey: writekey, dataset: dataset)
+      @libhoney = Libhoney::Client.new(writekey: writekey)
     end
 
     config.after_initialize do
-      db_builder = @libhoney.builder
-      db_builder.dataset = HoneycombRails.config.db_dataset
+      subscribers = []
 
-      [
-        Subscribers::ProcessAction.new(@libhoney),
-        Subscribers::ActiveRecord.new(db_builder),
-      ].each(&:subscribe!)
+      if !HoneycombRails.config.dataset.blank?
+        req_builder = @libhoney.builder
+        req_builder.dataset = HoneycombRails.config.dataset
+        subscribers.push(Subscribers::ProcessAction.new(req_builder))
+      end
+
+      if !HoneycombRails.config.db_dataset.blank?
+        db_builder = @libhoney.builder
+        db_builder.dataset = HoneycombRails.config.db_dataset
+        subscribers.push(Subscribers::ActiveRecord.new(db_builder))
+      end
+
+      subscribers.each(&:subscribe!)
     end
   end
 end

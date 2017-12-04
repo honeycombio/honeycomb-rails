@@ -30,10 +30,14 @@ module HoneycombRails
     # about the current user.
     attr_accessor :record_user
 
-    # The Honeycomb dataset to send request events to (default: 'rails').
+    # Send request events to the Honeycomb dataset with this name (default:
+    # 'rails'). Set to nil or an empty string to disable.
     attr_accessor :dataset
-    # The Honeycomb dataset to send ActiveRecord query events to (default: 'active_record').
+
+    # Send ActiveRecord query events to the Honeycomb dataset with this name
+    # (default: 'active_record'). Set to nil or empty string to disable.
     attr_accessor :db_dataset
+
     # The Honeycomb write key for your team (must be specified).
     attr_accessor :writekey
   end
