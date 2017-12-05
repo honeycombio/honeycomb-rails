@@ -44,7 +44,7 @@ module HoneycombRails
       end
 
       def honeycomb_user_metadata_devise
-        if current_user
+        if respond_to?(:current_user) and current_user
           {
             current_user_id: current_user.id,
             current_user_email: current_user.email,
