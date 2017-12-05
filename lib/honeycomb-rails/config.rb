@@ -8,6 +8,7 @@ module HoneycombRails
       @db_dataset = 'active_record'
       @record_flash = true
       @record_user = :detect
+      @logger = Rails.logger
     end
 
     # Whether to record flash messages (default: true).
@@ -16,6 +17,10 @@ module HoneycombRails
     def record_flash?
       !!@record_flash
     end
+
+    # If set, routes HoneycombRails-specific log output to this logger
+    # (defaults to Rails.logger)
+    attr_accessor :logger
 
     # If set, determines how to record the current user during request processing (default: :detect). Set to nil or false to disable.
     #
@@ -30,10 +35,14 @@ module HoneycombRails
     # about the current user.
     attr_accessor :record_user
 
-    # The Honeycomb dataset to send request events to (default: 'rails').
+    # Send request events to the Honeycomb dataset with this name (default:
+    # 'rails'). Set to nil or an empty string to disable.
     attr_accessor :dataset
-    # The Honeycomb dataset to send ActiveRecord query events to (default: 'active_record').
+
+    # Send ActiveRecord query events to the Honeycomb dataset with this name
+    # (default: 'active_record'). Set to nil or empty string to disable.
     attr_accessor :db_dataset
+
     # The Honeycomb write key for your team (must be specified).
     attr_accessor :writekey
   end
