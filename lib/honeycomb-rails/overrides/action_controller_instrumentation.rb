@@ -76,7 +76,9 @@ module HoneycombRails
         rescue Exception => exception
           honeycomb_metadata[:exception_class] = exception.class.to_s
           honeycomb_metadata[:exception_message] = exception.message
-          honeycomb_metadata[:exception_source] = Rails.backtrace_cleaner.clean(exception.backtrace)
+          if HoneycombRails.config.capture_exception_backtraces
+            honeycomb_metadata[:exception_source] = Rails.backtrace_cleaner.clean(exception.backtrace)
+          end
 
           raise
         end
