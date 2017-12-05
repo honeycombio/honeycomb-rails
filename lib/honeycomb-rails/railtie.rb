@@ -36,6 +36,10 @@ module HoneycombRails
         subscribers.push(Subscribers::ActiveRecord.new(db_builder))
       end
 
+      if subscribers.empty?
+        HoneycombRails.config.logger.warn("No subscribers defined (are both HoneycombRails.config.dataset and HoneycombRails.config.db_dataset both blank?")
+      end
+
       subscribers.each(&:subscribe!)
     end
   end
