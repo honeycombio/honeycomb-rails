@@ -81,9 +81,9 @@ RSpec.describe HoneycombRails::Overrides::ActionControllerInstrumentation do
       caught = false
       begin
         subject.honeycomb_attach_exception_metadata do
-            raise RuntimeError, 'kaboom!'
+          raise RuntimeError, 'kaboom!'
         end
-      rescue Exception
+      rescue StandardError
         caught = true
       end
 
@@ -98,9 +98,9 @@ RSpec.describe HoneycombRails::Overrides::ActionControllerInstrumentation do
 
       begin
         subject.honeycomb_attach_exception_metadata do
-            raise RuntimeError, 'kaboom!'
+          raise RuntimeError, 'kaboom!'
         end
-      rescue Exception
+      rescue StandardError
       end
 
       expect(subject.honeycomb_metadata).to include(exception_class: 'RuntimeError')

@@ -73,14 +73,14 @@ module HoneycombRails
       def honeycomb_attach_exception_metadata
         begin
           yield
-        rescue Exception => exception
+        rescue StandardError => exception
           honeycomb_metadata[:exception_class] = exception.class.to_s
           honeycomb_metadata[:exception_message] = exception.message
           if HoneycombRails.config.capture_exception_backtraces
             honeycomb_metadata[:exception_source] = Rails.backtrace_cleaner.clean(exception.backtrace)
           end
 
-          raise
+          raise exception
         end
       end
     end
