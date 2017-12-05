@@ -9,6 +9,7 @@ module HoneycombRails
       @record_flash = true
       @record_user = :detect
       @logger = Rails.logger
+      @capture_exceptions = false
     end
 
     # Whether to record flash messages (default: true).
@@ -45,6 +46,10 @@ module HoneycombRails
 
     # The Honeycomb write key for your team (must be specified).
     attr_accessor :writekey
+
+    # If set to true, captures exception class name / message / backtrace
+    # source along with Rails request events. (default: false)
+    attr_accessor :capture_exceptions
   end
 
   class << self

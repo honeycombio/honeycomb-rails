@@ -19,6 +19,10 @@ module HoneycombRails
     config.after_initialize do
       writekey = HoneycombRails.config.writekey
       @libhoney = Libhoney::Client.new(writekey: writekey)
+
+      if HoneycombRails.config.capture_exceptions
+        ::ActionController::Base.include(Extensions::ActionController::InstanceCaptureExceptionsFilters)
+      end
     end
 
     config.after_initialize do
