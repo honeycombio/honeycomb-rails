@@ -25,22 +25,6 @@ module HoneycombRails
         # @return [Hash<String=>Any>]
         attr_reader :honeycomb_metadata
       end
-
-      module InstanceCaptureExceptionsFilters
-        def self.included(controller_class)
-          controller_class.around_action do |base, block|
-            begin
-              block.call
-            rescue Exception => exception
-              honeycomb_metadata[:exception_class] = exception.class.to_s
-              honeycomb_metadata[:exception_message] = exception.message
-              honeycomb_metadata[:exception_source] = Rails.backtrace_cleaner.clean(exception.backtrace)
-
-              raise
-            end
-          end
-        end
-      end
     end
   end
 end

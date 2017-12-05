@@ -21,7 +21,7 @@ module HoneycombRails
       @libhoney = Libhoney::Client.new(writekey: writekey)
 
       if HoneycombRails.config.capture_exceptions
-        ::ActionController::Base.include(Extensions::ActionController::InstanceCaptureExceptionsFilters)
+        ::ActionController::Base.include(Overrides::ActionControllerFilters)
       end
     end
 
