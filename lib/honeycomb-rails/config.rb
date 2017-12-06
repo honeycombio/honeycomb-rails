@@ -57,9 +57,10 @@ module HoneycombRails
     # * 1 or lower - disable sampling on this dataset; capture all events
     # * TODO: :rails - default Rails dynamic sampling?
     #
-    # You can also pass a Proc, which will be called with the current controller
-    # instance during each request, and which should return a sample rate for
-    # the request in question.
+    # You can also pass a Proc, which will be called with the
+    # ActiveSupport::Notifications payload that was used to populate the
+    # Honeycomb event, and which should return a sample rate for the request
+    # in question.
     attr_accessor :sample_rate
 
     # If set to true, captures exception class name / message along with Rails
