@@ -19,6 +19,9 @@ RSpec.describe HoneycombRails::Overrides::ActionControllerInstrumentation do
   class FakeController
     attr_reader :flash, :honeycomb_metadata, :logger
 
+    # Noop so we can test honeycomb_attach_exception_metadata in peace
+    def self.around_action(*args); end
+
     def initialize
       @honeycomb_metadata = {}
       @flash = {}
@@ -27,6 +30,7 @@ RSpec.describe HoneycombRails::Overrides::ActionControllerInstrumentation do
 
     include FakeInstrumentation
     include HoneycombRails::Overrides::ActionControllerInstrumentation
+    include HoneycombRails::Overrides::ActionControllerFilters
   end
   class FakeAuthenticatedController < FakeController
     # Devise-like #current_user method
@@ -70,6 +74,39 @@ RSpec.describe HoneycombRails::Overrides::ActionControllerInstrumentation do
 
     expect(payload).to include(:honeycomb_metadata)
     expect(payload[:honeycomb_metadata]).to include(flash_notice: 'Fired ze missiles.')
+  end
+
+  describe 'when capturing exceptions by default' do
+    it 'should captures the exception metadata' do
+      caught = false
+      begin
+        subject.honeycomb_attach_exception_metadata do
+          raise RuntimeError, 'kaboom!'
+        end
+      rescue StandardError
+        caught = true
+      end
+
+      expect(caught).to eq true
+      expect(subject.honeycomb_metadata).to include(exception_class: 'RuntimeError')
+      expect(subject.honeycomb_metadata).to include(exception_message: 'kaboom!')
+      expect(subject.honeycomb_metadata).to include(:exception_source)
+    end
+
+    it 'should ignore backtraces if configured to do so' do
+      HoneycombRails.config.capture_exception_backtraces = false
+
+      begin
+        subject.honeycomb_attach_exception_metadata do
+          raise RuntimeError, 'kaboom!'
+        end
+      rescue StandardError
+      end
+
+      expect(subject.honeycomb_metadata).to include(exception_class: 'RuntimeError')
+      expect(subject.honeycomb_metadata).to include(exception_message: 'kaboom!')
+      expect(subject.honeycomb_metadata).to_not include(:exception_source)
+    end
   end
 
   describe 'if config.record_flash is false' do

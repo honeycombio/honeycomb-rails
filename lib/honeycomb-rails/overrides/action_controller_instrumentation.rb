@@ -65,5 +65,24 @@ module HoneycombRails
         end
       end
     end
+    module ActionControllerFilters
+      def self.included(controller_class)
+        controller_class.around_action :honeycomb_attach_exception_metadata
+      end
+
+      def honeycomb_attach_exception_metadata
+        begin
+          yield
+        rescue StandardError => exception
+          honeycomb_metadata[:exception_class] = exception.class.to_s
+          honeycomb_metadata[:exception_message] = exception.message
+          if HoneycombRails.config.capture_exception_backtraces
+            honeycomb_metadata[:exception_source] = Rails.backtrace_cleaner.clean(exception.backtrace)
+          end
+
+          raise
+        end
+      end
+    end
   end
 end
