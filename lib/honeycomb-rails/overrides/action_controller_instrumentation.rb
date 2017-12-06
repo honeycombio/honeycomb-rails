@@ -80,7 +80,7 @@ module HoneycombRails
             honeycomb_metadata[:exception_source] = Rails.backtrace_cleaner.clean(exception.backtrace)
           end
 
-          raise exception
+          raise
         end
       end
     end
