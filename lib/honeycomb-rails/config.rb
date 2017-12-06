@@ -11,6 +11,7 @@ module HoneycombRails
       @logger = Rails.logger
       @capture_exceptions = true
       @capture_exception_backtraces = true
+      @sample_rate = 1
     end
 
     # Whether to record flash messages (default: true).
@@ -47,6 +48,19 @@ module HoneycombRails
 
     # The Honeycomb write key for your team (must be specified).
     attr_accessor :writekey
+
+    # If set, determines how to record the sample rate for a given Honeycomb
+    # event. (default: 1, do not sample)
+    #
+    # Valid values:
+    # * Integer - sample Honeycomb events at a constant rate
+    # * 1 or lower - disable sampling on this dataset; capture all events
+    # * TODO: :rails - default Rails dynamic sampling?
+    #
+    # You can also pass a Proc, which will be called with the current controller
+    # instance during each request, and which should return a sample rate for
+    # the request in question.
+    attr_accessor :sample_rate
 
     # If set to true, captures exception class name / message along with Rails
     # request events. (default: true)

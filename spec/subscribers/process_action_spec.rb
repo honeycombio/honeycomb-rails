@@ -64,4 +64,49 @@ RSpec.describe HoneycombRails::Subscribers::ProcessAction do
 
     expect(fakehoney.events[0].data).to include(user_id: 42)
   end
+
+  describe 'if sample_rate is defined' do
+    it 'is defined as an Integer > 1' do
+      old_seed = srand 1227
+      HoneycombRails.config.sample_rate = 3
+      simulate_event
+      simulate_event
+      srand old_seed
+
+      expect(fakehoney.events.size).to eq 1
+      event = fakehoney.events[0]
+
+      expect(event.sample_rate).to eq 3
+    end
+
+    it 'is defined as an Integer <= 1' do
+      HoneycombRails.config.sample_rate = 0
+
+      simulate_event
+
+      expect(fakehoney.events[0].sample_rate).to eq 1
+    end
+
+    it 'is defined as a non-Integer' do
+      HoneycombRails.config.sample_rate = 0.5
+
+      simulate_event
+
+      expect(fakehoney.events[0].sample_rate).to eq 1
+    end
+
+    it 'is defined as a Proc' do
+      HoneycombRails.config.sample_rate = Proc.new do |payload|
+        payload[:should_use_sample_rate]
+      end
+      old_seed = srand 1203
+      simulate_event(payload: {should_use_sample_rate: 3})
+      srand old_seed
+
+      expect(fakehoney.events.size).to eq 1
+      event = fakehoney.events[0]
+
+      expect(event.sample_rate).to eq 3
+    end
+  end
 end

@@ -37,7 +37,19 @@ module HoneycombRails
           data.merge!(event.payload[Constants::EVENT_METADATA_KEY])
         end
 
-        @libhoney.send_now(data)
+        honeycomb_event = @libhoney.event
+        honeycomb_event.add(data)
+
+        case HoneycombRails.config.sample_rate
+        when Proc
+          honeycomb_event.sample_rate = HoneycombRails.config.sample_rate.call(event.payload)
+        when Integer
+          if HoneycombRails.config.sample_rate > 1
+            honeycomb_event.sample_rate = HoneycombRails.config.sample_rate
+          end
+        end
+
+        honeycomb_event.send
       end
     end
   end
