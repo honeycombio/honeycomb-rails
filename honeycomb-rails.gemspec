@@ -1,6 +1,6 @@
 Gem::Specification.new do |gem|
   gem.name = 'honeycomb-rails'
-  gem.version = '0.3.0'
+  gem.version = '0.4.0'
 
   gem.summary = 'Easily instrument your Rails apps with Honeycomb'
   gem.description = <<-DESC
