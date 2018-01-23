@@ -18,6 +18,10 @@ module HoneycombRails
     # the app's config/initializers has taken effect.
     config.after_initialize do
       writekey = HoneycombRails.config.writekey
+      if writekey.blank?
+        HoneycombRails.config.logger.warn("No write key defined! No events will be sent to Honeycomb.")
+      end
+
       @libhoney = Libhoney::Client.new(writekey: writekey)
 
       if HoneycombRails.config.capture_exceptions
@@ -41,7 +45,7 @@ module HoneycombRails
       end
 
       if subscribers.empty?
-        HoneycombRails.config.logger.warn("No subscribers defined (are both HoneycombRails.config.dataset and HoneycombRails.config.db_dataset both blank?")
+        HoneycombRails.config.logger.warn("No subscribers defined (are both HoneycombRails.config.dataset and HoneycombRails.config.db_dataset both blank?)")
       end
 
       subscribers.each(&:subscribe!)
