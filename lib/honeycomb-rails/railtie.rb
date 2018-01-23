@@ -19,7 +19,7 @@ module HoneycombRails
     config.after_initialize do
       writekey = HoneycombRails.config.writekey
       if writekey.blank?
-        HoneycombRails.config.logger.warn("No write key defined! No events will be sent to Honeycomb.")
+        HoneycombRails.config.logger.warn("No write key defined! (Check your config's `writekey` value in config/initializers/honeycomb.rb) No events will be sent to Honeycomb.")
       end
 
       @libhoney = Libhoney::Client.new(writekey: writekey)
