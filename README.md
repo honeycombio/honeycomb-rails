@@ -1,4 +1,4 @@
-# honeycomb-rails
+# honeycomb-rails [![Build Status](https://travis-ci.org/honeycombio/honeycomb-rails.svg?branch=master)](https://travis-ci.org/honeycombio/honeycomb-rails) [![Gem Version](https://badge.fury.io/rb/honeycomb-rails.svg)](https://badge.fury.io/rb/honeycomb-rails)
 
 Easily instrument your Rails apps with [Honeycomb](https://honeycomb.io).
 
