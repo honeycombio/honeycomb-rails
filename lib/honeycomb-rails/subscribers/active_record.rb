@@ -20,7 +20,11 @@ module HoneycombRails
         data = event.payload.slice(:name, :connection_id)
         data[:sql] = event.payload[:sql].strip
         event.payload[:binds].each do |b|
-          data["bind_#{ b.name }".to_sym] = b.value
+          if b.is_a?(Array)
+            data["bind_#{ b[0].name }".to_sym] = b[1]
+          elsif b.is_a?(Object)
+            data["bind_#{ b.name }".to_sym] = b.value
+          end
         end
         data[:duration] = event.duration
 
