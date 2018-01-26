@@ -7,7 +7,7 @@ module HoneycombRails
       def append_info_to_payload(payload)
         super
 
-        metadata = honeycomb_metadata
+        metadata = honeycomb_metadata || {}
 
         metadata.merge!(honeycomb_user_metadata)
 
