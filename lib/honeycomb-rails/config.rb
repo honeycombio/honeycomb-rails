@@ -30,6 +30,7 @@ module HoneycombRails
     # Valid values:
     #
     # * :devise - if your app uses Devise for authentication
+    # * :devise_api - if your app uses Devise for authentication in an 'api' namespace
     # * :detect - autodetect how to determine the current user
     # * nil, false - disable recording current user
     #

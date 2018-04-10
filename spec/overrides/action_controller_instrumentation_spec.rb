@@ -36,6 +36,11 @@ RSpec.describe HoneycombRails::Overrides::ActionControllerInstrumentation do
     # Devise-like #current_user method
     attr_accessor :current_user
   end
+  class FakeAuthenticatedAPIController < FakeController
+    # Simulate a particular configuration of Devise that has a
+    # #current_api_user method
+    attr_accessor :current_api_user
+  end
 
   let(:payload) { {} }
   subject { FakeController.new }
@@ -225,6 +230,71 @@ RSpec.describe HoneycombRails::Overrides::ActionControllerInstrumentation do
 
         expect(payload).to include(:honeycomb_metadata)
         expect(payload[:honeycomb_metadata]).to include(logged_in: true)
+      end
+    end
+  end
+
+  describe 'Devise-like controller in an API configuration with #current_api_user' do
+    subject { FakeAuthenticatedAPIController.new }
+
+    describe 'if config.record_user is :devise_api' do
+      before { HoneycombRails.config.record_user = :devise_api }
+
+      it 'adds information about the current user if set' do
+        subject.current_api_user = User.new(42, 'test@example.com', true)
+
+        subject.append_info_to_payload(payload)
+
+        expect(payload).to include(:honeycomb_metadata)
+        expect(payload[:honeycomb_metadata]).to include(current_user_id: 42)
+        expect(payload[:honeycomb_metadata]).to include(current_user_email: 'test@example.com')
+        expect(payload[:honeycomb_metadata]).to include(current_user_admin: true)
+      end
+    end
+
+    describe 'if config.record_user is :detect' do
+      before { HoneycombRails.config.record_user = :detect }
+
+      it 'adds information about the current user if set' do
+        subject.current_api_user = User.new(42, 'test@example.com', true)
+
+        subject.append_info_to_payload(payload)
+
+        expect(payload).to include(:honeycomb_metadata)
+        expect(payload[:honeycomb_metadata]).to include(current_user_id: 42)
+        expect(payload[:honeycomb_metadata]).to include(current_user_email: 'test@example.com')
+        expect(payload[:honeycomb_metadata]).to include(current_user_admin: true)
+      end
+
+      it 'sets config.record_user to :devise_api for the next run' do
+        subject.append_info_to_payload(payload)
+        expect(HoneycombRails.config.record_user).to eq :devise_api
+      end
+    end
+
+    describe 'if config.record_user is nil' do
+      before { HoneycombRails.config.record_user = nil }
+
+      it 'does not record the current user even if set' do
+        subject.current_api_user = User.new(42, 'test@example.com', true)
+
+        subject.append_info_to_payload(payload)
+
+        expect(payload).to include(:honeycomb_metadata)
+        expect(payload[:honeycomb_metadata]).to_not include(:current_user_id, :current_user_email, :current_user_admin)
+      end
+    end
+
+    describe 'if config.record_user is false' do
+      before { HoneycombRails.config.record_user = false }
+
+      it 'does not record the current user even if set' do
+        subject.current_api_user = User.new(42, 'test@example.com', true)
+
+        subject.append_info_to_payload(payload)
+
+        expect(payload).to include(:honeycomb_metadata)
+        expect(payload[:honeycomb_metadata]).to_not include(:current_user_id, :current_user_email, :current_user_admin)
       end
     end
   end
