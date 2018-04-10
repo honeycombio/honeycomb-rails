@@ -58,11 +58,11 @@ module HoneycombRails
       end
 
       def honeycomb_user_metadata_devise_api
-        if respond_to?(:current_user_api) and current_user_api
+        if respond_to?(:current_api_user) and current_api_user
           {
-            current_user_id: current_user_api.id,
-            current_user_email: current_user_api.email,
-            current_user_admin: !!current_user_api.try(:admin?),
+            current_user_id: current_api_user.id,
+            current_user_email: current_api_user.email,
+            current_user_admin: !!current_api_user.try(:admin?),
           }
         else
           {}
@@ -73,7 +73,7 @@ module HoneycombRails
         if respond_to?(:current_user)
           # This could be more sophisticated, but it'll do for now
           HoneycombRails.config.record_user = :devise
-        elsif respond_to?(:current_user_api)
+        elsif respond_to?(:current_api_user)
           HoneycombRails.config.record_user = :devise_api
         else
           logger.error "HoneycombRails.config.record_user = :detect but couldn't detect user methods; disabling user recording."
