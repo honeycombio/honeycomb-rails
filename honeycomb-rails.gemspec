@@ -1,6 +1,10 @@
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH << lib unless $LOAD_PATH.include?(lib)
+require 'honeycomb-rails/version'
+
 Gem::Specification.new do |gem|
-  gem.name = 'honeycomb-rails'
-  gem.version = '0.4.2'
+  gem.name = HoneycombRails::GEM_NAME
+  gem.version = HoneycombRails::VERSION
 
   gem.summary = 'Easily instrument your Rails apps with Honeycomb'
   gem.description = <<-DESC
@@ -16,16 +20,13 @@ Gem::Specification.new do |gem|
   gem.license = 'MIT'
 
 
-  gem.add_dependency 'libhoney', '>= 1.3.2'
+  gem.add_dependency 'libhoney', '>= 1.5.0'
   gem.add_dependency 'rails', '>= 3.0.0'
 
   gem.add_development_dependency 'bump'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'yard'
-  # override libhoney version requirement just for development: we want the
-  # testing support in the newer version
-  gem.add_development_dependency 'libhoney', '>= 1.4.0'
 
 
   gem.required_ruby_version = '>= 2.0.0'

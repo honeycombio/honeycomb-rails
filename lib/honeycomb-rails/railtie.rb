@@ -22,7 +22,10 @@ module HoneycombRails
         HoneycombRails.config.logger.warn("No write key defined! (Check your config's `writekey` value in config/initializers/honeycomb.rb) No events will be sent to Honeycomb.")
       end
 
-      @libhoney = Libhoney::Client.new(writekey: writekey)
+      @libhoney = Libhoney::Client.new(
+        writekey: writekey,
+        user_agent_addition: HoneycombRails::USER_AGENT_SUFFIX,
+      )
 
       if HoneycombRails.config.capture_exceptions
         ::ActionController::Base.include(Overrides::ActionControllerFilters)
