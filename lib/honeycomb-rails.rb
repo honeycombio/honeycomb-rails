@@ -3,6 +3,7 @@ if !defined?(Rails)
 end
 
 require 'honeycomb-rails/config'
+require 'honeycomb-rails/version'
 
 module HoneycombRails
   class << self
