@@ -1,7 +1,7 @@
 require 'honeycomb-rails/overrides/action_controller_instrumentation'
 
 RSpec.describe HoneycombRails::Overrides::ActionControllerInstrumentation do
-    after { HoneycombRails.reset_config_to_default! }
+  after { HoneycombRails.reset_config_to_default! }
 
   # set up conditions this override expects from a real ActionController
 
