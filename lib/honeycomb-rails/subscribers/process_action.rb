@@ -21,11 +21,40 @@ module HoneycombRails
 
         # These are the keys we're interested in! Skipping noisy keys (:headers, :params) for now.
         data = event.payload.slice(:controller, :action, :method, :path, :format,
-                                  :status, :db_runtime, :view_runtime)
+                                  :status, :db_runtime, :view_runtime,
+                                  :exception, :exception_object)
 
         # Massage data to return "all" as the :format if not set
         if !data[:format] || data[:format] == "format:*/*"
           data[:format] = "all"
+        end
+
+        # strip off exception fields for more friendly formatting
+        exception_info = data.delete(:exception)
+        exception = data.delete(:exception_object)
+
+        if exception_info
+          exception_class, exception_message = exception_info
+
+          # Apparently these notifications don't include the `status` field if
+          # an exception occurred while handling the request, even though the
+          # response certainly does end up with a status code set. We'd like to
+          # report that status code, so we reuse the same status code lookup
+          # table that ActionController uses. This looks janky, but it's how the
+          # standard Rails logging does it too... :|
+          #
+          # https://github.com/rails/rails/blob/37b373a8d2a1cd132bbde51cd5a3abd4ecee433b/actionpack/lib/action_controller/log_subscriber.rb#L27
+          data[:status] ||= ActionDispatch::ExceptionWrapper.status_code_for_exception(exception_class)
+
+          if HoneycombRails.config.capture_exceptions
+            data[:exception_class] = exception_class
+            data[:exception_message] = exception_message
+
+            if exception && HoneycombRails.config.capture_exception_backtraces
+              data[:exception_source] = ::Rails.backtrace_cleaner.clean(exception.backtrace)
+            end
+
+          end
         end
 
         # Pull top-level attributes off of the ActiveSupport Event.
