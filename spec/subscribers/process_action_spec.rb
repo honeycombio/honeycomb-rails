@@ -66,6 +66,8 @@ RSpec.describe HoneycombRails::Subscribers::ProcessAction do
   end
 
   describe 'if sample_rate is defined' do
+    after { HoneycombRails.reset_config_to_default! }
+
     it 'is defined as an Integer > 1' do
       old_seed = srand 1227
       HoneycombRails.config.sample_rate = 3
