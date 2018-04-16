@@ -8,7 +8,6 @@ module HoneycombRails
       @db_dataset = 'active_record'
       @record_flash = true
       @record_user = :detect
-      @logger = Rails.logger
       @capture_exceptions = true
       @capture_exception_backtraces = true
       @sample_rate = 1

@@ -17,6 +17,8 @@ module HoneycombRails
     # set up libhoney after application initialization so that any config in
     # the app's config/initializers has taken effect.
     config.after_initialize do
+      HoneycombRails.config.logger ||= ::Rails.logger
+
       writekey = HoneycombRails.config.writekey
       if writekey.blank?
         HoneycombRails.config.logger.warn("No write key defined! (Check your config's `writekey` value in config/initializers/honeycomb.rb) No events will be sent to Honeycomb.")
