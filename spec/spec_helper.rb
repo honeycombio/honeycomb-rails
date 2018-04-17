@@ -1,4 +1,7 @@
+require File.dirname(__FILE__) + "/support/test_rails_app/app.rb"
+
 require 'libhoney'
+require 'rspec/rails'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
