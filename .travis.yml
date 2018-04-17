@@ -3,6 +3,10 @@ rvm:
   - 2.2
   - 2.3
   - 2.4
+gemfile:
+  - Gemfile
+  - Gemfile.rails3.rb
+  - Gemfile.rails4.rb
 deploy:
   provider: rubygems
   api_key:
