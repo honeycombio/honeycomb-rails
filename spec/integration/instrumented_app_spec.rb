@@ -38,7 +38,11 @@ RSpec.describe 'instrumented Rails app', integration: true, type: :request do
         exception_message: 'kaboom!',
         status: 500,
       )
-      expect(event.data[:exception_source]).to be_an Array
+
+      if Rails::VERSION::MAJOR > 4
+        # we only support capturing exception_source on Rails 5+
+        expect(event.data[:exception_source]).to be_an Array
+      end
     end
 
   end
