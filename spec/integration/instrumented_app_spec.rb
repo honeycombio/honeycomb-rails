@@ -1,6 +1,6 @@
 RSpec.describe 'instrumented Rails app', integration: true, type: :request do
-  before :all { TestApp.initialize! }
-  after :all { HoneycombRails.reset_config_to_default! }
+  before(:all) { TestApp.initialize! }
+  after(:all) { HoneycombRails.reset_config_to_default! }
 
   after { HoneycombRails.config.client.reset }
 
