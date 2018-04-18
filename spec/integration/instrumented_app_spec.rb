@@ -1,4 +1,4 @@
-RSpec.describe 'instrumented Rails app', integration: true, type: :request do
+RSpec.describe "instrumented Rails #{Rails::VERSION::MAJOR} app", integration: true, type: :request do
   before(:all) { TestApp.initialize! }
   after(:all) { HoneycombRails.reset_config_to_default! }
 
