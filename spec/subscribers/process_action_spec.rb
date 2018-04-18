@@ -65,6 +65,109 @@ RSpec.describe HoneycombRails::Subscribers::ProcessAction do
     expect(fakehoney.events[0].data).to include(user_id: 42)
   end
 
+  describe 'exception reporting' do
+    def simulate_exception
+      # produce an exception with a meaningful backtrace
+      begin
+        raise 'Oops'
+      rescue => e
+      end
+      expect(e.backtrace).to be_an Array
+
+      simulate_event(payload: {
+        exception: [e.class.name, e.message],
+        exception_object: e,
+        status: nil, # how ActionController seems to do it
+      })
+    end
+
+    describe 'by default' do
+      it 'captures the exception class and message' do
+        simulate_exception
+
+        expect(fakehoney.events[0].data).to include(
+          exception_class: 'RuntimeError',
+          exception_message: 'Oops',
+        )
+      end
+
+      it 'records an HTTP status code indicating error' do
+        simulate_exception
+
+        expect(fakehoney.events[0].data).to include(status: 500)
+      end
+
+      it 'records the backtrace in exception_source' do
+        simulate_exception
+
+        event = fakehoney.events[0]
+        expect(event.data[:exception_source]).to be_an Array
+      end
+
+      it 'strips off raw exception info from the payload' do
+        simulate_exception
+        expect(fakehoney.events[0].data).to_not include(:exception, :exception_object)
+      end
+    end
+
+    describe 'with config.capture_exceptions = false' do
+      before(:all) { HoneycombRails.config.capture_exceptions = false }
+      after(:all) { HoneycombRails.reset_config_to_default! }
+
+      it 'does not capture the exception class and message' do
+        simulate_exception
+
+        expect(fakehoney.events[0].data).to_not include(:exception_class, :exception_message)
+      end
+
+      it 'records an HTTP status code indicating error' do
+        simulate_exception
+
+        expect(fakehoney.events[0].data).to include(status: 500)
+      end
+
+      it 'does not record exception_source' do
+        simulate_exception
+        expect(fakehoney.events[0].data).to_not include(:exception_source)
+      end
+
+      it 'strips off raw exception info from the payload' do
+        simulate_exception
+        expect(fakehoney.events[0].data).to_not include(:exception, :exception_object)
+      end
+    end
+
+    describe 'with config.capture_exception_backtraces = false' do
+      before(:all) { HoneycombRails.config.capture_exception_backtraces = false }
+      after(:all) { HoneycombRails.reset_config_to_default! }
+
+      it 'captures the exception class and message' do
+        simulate_exception
+
+        expect(fakehoney.events[0].data).to include(
+          exception_class: 'RuntimeError',
+          exception_message: 'Oops',
+        )
+      end
+
+      it 'records an HTTP status code indicating error' do
+        simulate_exception
+
+        expect(fakehoney.events[0].data).to include(status: 500)
+      end
+
+      it 'does not record exception_source' do
+        simulate_exception
+        expect(fakehoney.events[0].data).to_not include(:exception_source)
+      end
+
+      it 'strips off raw exception info from the payload' do
+        simulate_exception
+        expect(fakehoney.events[0].data).to_not include(:exception, :exception_object)
+      end
+    end
+  end
+
   describe 'if sample_rate is defined' do
     after { HoneycombRails.reset_config_to_default! }
 

@@ -28,10 +28,6 @@ module HoneycombRails
         writekey: writekey,
         user_agent_addition: HoneycombRails::USER_AGENT_SUFFIX,
       )
-
-      if HoneycombRails.config.capture_exceptions
-        ::ActionController::Base.include(Overrides::ActionControllerFilters)
-      end
     end
 
     config.after_initialize do
