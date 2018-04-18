@@ -6,8 +6,12 @@ require 'honeycomb-rails'
 
 class TestApp < Rails::Application
   # some minimal config Rails expects to be present
-  config.secret_key_base = 'test'
-  config.secret_token = 'test' * 8
+  if Rails::VERSION::MAJOR < 4
+    config.secret_token = 'test' * 8
+  else
+    config.secret_key_base = 'test'
+  end
+
   config.eager_load = true
 
   routes.append do
