@@ -6,3 +6,4 @@ gemspec
 gem 'libhoney', '>= 1.5.1'
 
 gem 'rails', '< 4'
+gem 'test-unit', '~> 3.0'
