@@ -5,6 +5,8 @@ require 'honeycomb-rails'
 
 
 class TestApp < Rails::Application
+  # some minimal config Rails expects to be present
+  config.secret_key_base = 'test'
   config.eager_load = true
 
   routes.append do
