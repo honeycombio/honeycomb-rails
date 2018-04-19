@@ -24,8 +24,6 @@ class TestApp < Rails::Application
       config.client = Libhoney::TestClient.new
     end
   end
-
-  # TODO shouldn't write log/development.log
 end
 
 class HelloController < ActionController::Base

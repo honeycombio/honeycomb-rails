@@ -3,6 +3,8 @@ require File.dirname(__FILE__) + "/support/test_rails_app/app.rb"
 require 'libhoney'
 require 'rspec/rails'
 
+ENV['RACK_ENV'] ||= 'test'
+
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     # This option will default to `true` in RSpec 4. It makes the `description`
