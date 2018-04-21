@@ -1,4 +1,9 @@
+require File.dirname(__FILE__) + "/support/test_rails_app/app.rb"
+
 require 'libhoney'
+require 'rspec/rails'
+
+ENV['RACK_ENV'] ||= 'test'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

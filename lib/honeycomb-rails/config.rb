@@ -38,6 +38,11 @@ module HoneycombRails
     # about the current user.
     attr_accessor :record_user
 
+    # Override the default Libhoney::Client used to send events to Honeycomb.
+    # If this is specified, {#writekey} will be ignored.
+    # @api private
+    attr_accessor :client
+
     # Send request events to the Honeycomb dataset with this name (default:
     # 'rails'). Set to nil or an empty string to disable.
     attr_accessor :dataset

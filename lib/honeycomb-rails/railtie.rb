@@ -19,15 +19,17 @@ module HoneycombRails
     config.after_initialize do
       HoneycombRails.config.logger ||= ::Rails.logger
 
-      writekey = HoneycombRails.config.writekey
-      if writekey.blank?
-        HoneycombRails.config.logger.warn("No write key defined! (Check your config's `writekey` value in config/initializers/honeycomb.rb) No events will be sent to Honeycomb.")
-      end
+      @libhoney = HoneycombRails.config.client || begin
+        writekey = HoneycombRails.config.writekey
+        if writekey.blank?
+          HoneycombRails.config.logger.warn("No write key defined! (Check your config's `writekey` value in config/initializers/honeycomb.rb) No events will be sent to Honeycomb.")
+        end
 
-      @libhoney = Libhoney::Client.new(
-        writekey: writekey,
-        user_agent_addition: HoneycombRails::USER_AGENT_SUFFIX,
-      )
+        Libhoney::Client.new(
+          writekey: writekey,
+          user_agent_addition: HoneycombRails::USER_AGENT_SUFFIX,
+        )
+      end
     end
 
     config.after_initialize do

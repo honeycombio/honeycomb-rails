@@ -5,8 +5,17 @@ module HoneycombRails
         def self.included(controller_class)
           super
 
-          controller_class.before_action do
+          install_before_filter!(controller_class) do
             honeycomb_initialize
+          end
+        end
+
+        def self.install_before_filter!(controller_class, &block)
+          raise ArgumentError unless block_given?
+          if ::Rails::VERSION::MAJOR < 4
+            controller_class.before_filter(&block)
+          else
+            controller_class.before_action(&block)
           end
         end
 
