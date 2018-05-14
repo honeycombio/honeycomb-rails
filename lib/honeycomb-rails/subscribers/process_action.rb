@@ -24,6 +24,10 @@ module HoneycombRails
                                   :status, :db_runtime, :view_runtime,
                                   :exception, :exception_object)
 
+        if request_id = event.payload[:headers][:'action_dispatch.request_id']
+          data[:request_id] = request_id
+        end
+
         # Massage data to return "all" as the :format if not set
         if !data[:format] || data[:format] == "format:*/*"
           data[:format] = "all"

@@ -14,6 +14,7 @@ RSpec.describe HoneycombRails::Subscribers::ProcessAction do
     status: 200,
     db_runtime: 123,
     view_runtime: 42,
+    headers: {'action_dispatch.request_id': '0123beefcafe'},
   }.freeze
 
   def simulate_event(payload: {}, start: Time.now, finish: Time.now + 1)
@@ -51,6 +52,12 @@ RSpec.describe HoneycombRails::Subscribers::ProcessAction do
 
     expect(fakehoney.events[0].data).to include(:duration_ms)
     expect(fakehoney.events[0].data[:duration_ms]).to eq 2000
+  end
+
+  it 'records the Rails-supplied request id as request_id' do
+    simulate_event(payload: {headers: {'action_dispatch.request_id': '456beefcafe'}})
+
+    expect(fakehoney.events[0].data).to include(request_id: '456beefcafe')
   end
 
   it 'massages the "format" property' do
