@@ -1,4 +1,5 @@
 require 'honeycomb-rails/constants'
+require 'honeycomb-rails/subscribers/sampling'
 
 require 'active_support/core_ext/hash'
 require 'active_support/notifications'
@@ -6,6 +7,8 @@ require 'active_support/notifications'
 module HoneycombRails
   module Subscribers
     class ProcessAction
+      include Sampling
+
       def initialize(libhoney)
         @libhoney = libhoney
       end
@@ -73,14 +76,7 @@ module HoneycombRails
         honeycomb_event = @libhoney.event
         honeycomb_event.add(data)
 
-        case HoneycombRails.config.sample_rate
-        when Proc
-          honeycomb_event.sample_rate = HoneycombRails.config.sample_rate.call(event.payload)
-        when Integer
-          if HoneycombRails.config.sample_rate > 1
-            honeycomb_event.sample_rate = HoneycombRails.config.sample_rate
-          end
-        end
+        sample_event_if_required(honeycomb_event, event)
 
         honeycomb_event.send
       end
