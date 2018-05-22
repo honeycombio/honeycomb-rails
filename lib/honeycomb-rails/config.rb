@@ -58,9 +58,8 @@ module HoneycombRails
     # event. (default: 1, do not sample)
     #
     # Valid values:
-    # * Integer - sample Honeycomb events at a constant rate
-    # * 1 or lower - disable sampling on this dataset; capture all events
-    # * TODO: :rails - default Rails dynamic sampling?
+    # * Integer > 1 - sample Honeycomb events at a constant rate
+    # * 1 - disable sampling on this dataset; capture all events
     #
     # You can also pass a Proc, which will be called with the
     # ActiveSupport::Notifications payload that was used to populate the
