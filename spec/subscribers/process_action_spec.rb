@@ -5,7 +5,7 @@ RSpec.describe HoneycombRails::Subscribers::ProcessAction do
 
   subject { described_class.new(fakehoney) }
 
-  TEST_PAYLOAD = {
+  let(:test_payload) { {
     controller: :widgets,
     action: :index,
     method: 'GET',
@@ -15,7 +15,7 @@ RSpec.describe HoneycombRails::Subscribers::ProcessAction do
     db_runtime: 123,
     view_runtime: 42,
     headers: {'action_dispatch.request_id': '0123beefcafe'},
-  }.freeze
+  } }
 
   def simulate_event(payload: {}, start: Time.now, finish: Time.now + 1)
     subject.call(
@@ -23,7 +23,7 @@ RSpec.describe HoneycombRails::Subscribers::ProcessAction do
       start,
       finish,
       'abcdef0123456',
-      TEST_PAYLOAD.merge(payload),
+      test_payload.merge(payload),
     )
   end
 
