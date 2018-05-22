@@ -27,7 +27,7 @@ module HoneycombRails
                                   :status, :db_runtime, :view_runtime,
                                   :exception, :exception_object)
 
-        if request_id = event.payload[:headers][:'action_dispatch.request_id']
+        if event.payload.key?(:headers) && request_id = event.payload[:headers][:'action_dispatch.request_id']
           data[:request_id] = request_id
         end
 
