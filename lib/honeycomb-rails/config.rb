@@ -54,6 +54,7 @@ module HoneycombRails
     # The Honeycomb write key for your team (must be specified).
     attr_accessor :writekey
 
+    # @!attribute sample_rate
     # If set, determines how to record the sample rate for a given Honeycomb
     # event. (default: 1, do not sample)
     #
@@ -61,11 +62,40 @@ module HoneycombRails
     # * Integer > 1 - sample Honeycomb events at a constant rate
     # * 1 - disable sampling on this dataset; capture all events
     #
-    # You can also pass a Proc, which will be called with the
-    # ActiveSupport::Notifications payload that was used to populate the
-    # Honeycomb event, and which should return a sample rate for the request or
-    # database query in question.
-    attr_accessor :sample_rate
+    # You can also pass a block, which will be called with the
+    # event type and the ActiveSupport::Notifications payload that was used to
+    # populate the Honeycomb event, and which should return a sample rate for
+    # the request or database query in question. For example, to sample
+    # successful (200) requests and read (SELECT) queries at 100:1 and all other
+    # requests at 1:1:
+    #
+    # @example Dynamic sampling with a block
+    #   config.sample_rate do |event_type, payload|
+    #     case event_type
+    #     when 'sql.active_record'
+    #       if payload[:sql] =~ /^SELECT/
+    #         100
+    #       else
+    #         1
+    #       end
+    #     when 'process_action.action_controller'
+    #       if payload[:status] == 200
+    #         100
+    #       else
+    #         1
+    #       end
+    #     end
+    #   end
+
+    attr_writer :sample_rate
+
+    def sample_rate(&block)
+      if block
+        self.sample_rate = block
+      else
+        @sample_rate
+      end
+    end
 
     # If set to true, captures exception class name / message along with Rails
     # request events. (default: true)

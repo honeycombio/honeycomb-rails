@@ -221,8 +221,8 @@ RSpec.describe HoneycombRails::Subscribers::ProcessAction do
       expect(fakehoney.events[0].sample_rate).to eq 1
     end
 
-    it 'samples events dynamically if passed a Proc' do
-      HoneycombRails.config.sample_rate = Proc.new do |payload|
+    it 'samples events dynamically if passed a block' do
+      HoneycombRails.config.sample_rate do |event_type, payload|
         payload[:should_use_sample_rate]
       end
       old_seed = srand 1203
