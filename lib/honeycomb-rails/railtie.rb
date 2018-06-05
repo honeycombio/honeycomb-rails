@@ -21,37 +21,30 @@ module HoneycombRails
 
       @libhoney = HoneycombRails.config.client || begin
         writekey = HoneycombRails.config.writekey
-        if writekey.blank?
-          HoneycombRails.config.logger.warn("No write key defined! (Check your config's `writekey` value in config/initializers/honeycomb.rb) No events will be sent to Honeycomb.")
+        default_dataset = HoneycombRails.config.dataset
+        if writekey.blank? || default_dataset.blank?
+          missing = writekey.blank? ? 'writekey' : 'dataset'
+          warn "No #{missing} defined! (Check your config's `#{missing}` value in config/initializers/honeycomb.rb) No events will be sent to Honeycomb."
+          Libhoney::NullClient.new
+        else
+          Libhoney::Client.new(
+            writekey: writekey,
+            dataset: default_dataset,
+            user_agent_addition: HoneycombRails::USER_AGENT_SUFFIX,
+          )
         end
-
-        Libhoney::Client.new(
-          writekey: writekey,
-          user_agent_addition: HoneycombRails::USER_AGENT_SUFFIX,
-        )
       end
     end
 
     config.after_initialize do
-      subscribers = []
-
-      if !HoneycombRails.config.dataset.blank?
-        req_builder = @libhoney.builder
-        req_builder.dataset = HoneycombRails.config.dataset
-        subscribers.push(Subscribers::ProcessAction.new(req_builder))
-      end
+      req_builder = @libhoney.builder
+      Subscribers::ProcessAction.new(req_builder).subscribe!
 
       if !HoneycombRails.config.db_dataset.blank?
         db_builder = @libhoney.builder
         db_builder.dataset = HoneycombRails.config.db_dataset
-        subscribers.push(Subscribers::ActiveRecord.new(db_builder))
+        Subscribers::ActiveRecord.new(db_builder).subscribe!
       end
-
-      if subscribers.empty?
-        HoneycombRails.config.logger.warn("No subscribers defined (are both HoneycombRails.config.dataset and HoneycombRails.config.db_dataset both blank?)")
-      end
-
-      subscribers.each(&:subscribe!)
     end
   end
 end
