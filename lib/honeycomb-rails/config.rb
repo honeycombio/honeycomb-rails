@@ -6,7 +6,7 @@ module HoneycombRails
     def initialize
       @dataset = 'rails'
       @db_dataset = 'active_record'
-      @record_flash = true
+      @record_flash = false
       @record_user = :detect
       @capture_exceptions = true
       @capture_exception_backtraces = true

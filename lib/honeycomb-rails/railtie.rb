@@ -7,11 +7,11 @@ require 'libhoney'
 module HoneycombRails
   class Railtie < ::Rails::Railtie
     initializer 'honeycomb.action_controller_extensions', after: :action_controller do
-      ::ActionController::Base.include(Extensions::ActionController::InstanceMethods)
+      ::ActionController::API.include(Extensions::ActionController::InstanceMethods)
     end
 
     initializer 'honeycomb.action_controller_overrides', after: :action_controller do
-      ::ActionController::Base.include(Overrides::ActionControllerInstrumentation)
+      ::ActionController::API.include(Overrides::ActionControllerInstrumentation)
     end
 
     # set up libhoney after application initialization so that any config in

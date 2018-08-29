@@ -26,7 +26,7 @@ class TestApp < Rails::Application
   end
 end
 
-class HelloController < ActionController::Base
+class HelloController < ActionController::API
   class Explosion < RuntimeError; end
 
   def show
