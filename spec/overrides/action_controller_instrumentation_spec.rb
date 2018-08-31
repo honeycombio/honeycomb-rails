@@ -17,11 +17,10 @@ RSpec.describe HoneycombRails::Overrides::ActionControllerInstrumentation do
     end
   end
   class FakeController
-    attr_reader :flash, :honeycomb_metadata, :logger
+    attr_reader :honeycomb_metadata, :logger
 
     def initialize
       @honeycomb_metadata = {}
-      @flash = {}
       @logger = FakeLogger.new
     end
 
@@ -48,48 +47,6 @@ RSpec.describe HoneycombRails::Overrides::ActionControllerInstrumentation do
 
     expect(payload).to include(:honeycomb_metadata)
     expect(payload[:honeycomb_metadata]).to include(argle: :bargle)
-  end
-
-  it 'adds the flash alert to the payload if present' do
-    subject.flash[:alert] = 'The missiles, they are coming'
-
-    subject.append_info_to_payload(payload)
-
-    expect(payload).to include(:honeycomb_metadata)
-    expect(payload[:honeycomb_metadata]).to include(flash_alert: 'The missiles, they are coming')
-  end
-
-  it 'adds the flash error to the payload if present' do
-    subject.flash[:error] = 'Invalid email address'
-
-    subject.append_info_to_payload(payload)
-
-    expect(payload).to include(:honeycomb_metadata)
-    expect(payload[:honeycomb_metadata]).to include(flash_error: 'Invalid email address')
-  end
-
-  it 'adds the flash notice to the payload if present' do
-    subject.flash[:notice] = 'Fired ze missiles.'
-
-    subject.append_info_to_payload(payload)
-
-    expect(payload).to include(:honeycomb_metadata)
-    expect(payload[:honeycomb_metadata]).to include(flash_notice: 'Fired ze missiles.')
-  end
-
-  describe 'if config.record_flash is false' do
-    before { HoneycombRails.config.record_flash = false }
-
-    it 'does not record the flash' do
-      subject.flash[:alert] = 'The missiles, they are coming'
-      subject.flash[:error] = 'Invalid email address'
-      subject.flash[:notice] = 'Fired ze missiles.'
-
-      subject.append_info_to_payload(payload)
-
-      expect(payload).to include(:honeycomb_metadata)
-      expect(payload[:honeycomb_metadata]).to_not include(:flash_alert, :flash_error, :flash_notice)
-    end
   end
 
   describe 'controller without #current_user' do
