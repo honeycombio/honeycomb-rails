@@ -3,6 +3,7 @@ rvm:
   - 2.2
   - 2.3
   - 2.4
+  - 2.5
 gemfile:
   - Gemfile
   - Gemfile.rails3.rb
@@ -15,4 +16,4 @@ deploy:
   on:
     tags: true
     repo: honeycombio/honeycomb-rails
-    ruby: '2.4'
+    ruby: '2.5'
