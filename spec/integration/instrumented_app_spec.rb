@@ -27,6 +27,12 @@ RSpec.describe "instrumented Rails #{Rails::VERSION::MAJOR} app", integration: t
       )
     end
 
+    it 'includes custom fields set on #honeycomb_metadata' do
+      get '/hello'
+
+      expect(emitted_event.data).to include(greetee: 'world')
+    end
+
     it 'sends events for requests we failed to handle, recording exception details' do
       get '/explode'
 
@@ -45,6 +51,48 @@ RSpec.describe "instrumented Rails #{Rails::VERSION::MAJOR} app", integration: t
       end
     end
 
+  end
+
+  if Rails::VERSION::MAJOR >= 5
+    describe 'API-only app' do
+
+      it 'sends events for each successful request' do
+        get '/api/hello'
+
+        expect(response.status).to eq(200)
+
+        event = emitted_event
+        expect(event.data).to include(
+          controller: HelloApiController.name,
+          action: 'show',
+          method: 'GET',
+          path: '/api/hello',
+          status: 200,
+        )
+      end
+
+      it 'includes custom fields set on #honeycomb_metadata' do
+        get '/api/hello'
+
+        expect(emitted_event.data).to include(greetee: 'world')
+      end
+
+      it 'sends events for requests we failed to handle, recording exception details' do
+        get '/api/explode'
+
+        expect(response.status).to eq(500)
+
+        event = emitted_event
+        expect(event.data).to include(
+          exception_class: HelloApiController::Explosion.name,
+          exception_message: 'kaboom!',
+          status: 500,
+        )
+
+        expect(event.data[:exception_source]).to be_an Array
+      end
+
+    end
   end
 
   describe 'with config.capture_exceptions = false' do

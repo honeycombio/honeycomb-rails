@@ -8,10 +8,18 @@ module HoneycombRails
   class Railtie < ::Rails::Railtie
     initializer 'honeycomb.action_controller_extensions', after: :action_controller do
       ::ActionController::Base.include(Extensions::ActionController::InstanceMethods)
+
+      if defined?(::ActionController::API) # Rails 5 and above
+        ::ActionController::API.include(Extensions::ActionController::InstanceMethods)
+      end
     end
 
     initializer 'honeycomb.action_controller_overrides', after: :action_controller do
       ::ActionController::Base.include(Overrides::ActionControllerInstrumentation)
+
+      if defined?(::ActionController::API) # Rails 5 and above
+        ::ActionController::API.include(Overrides::ActionControllerInstrumentation)
+      end
     end
 
     # set up libhoney after application initialization so that any config in
