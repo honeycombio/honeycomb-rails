@@ -11,7 +11,7 @@ module HoneycombRails
 
         metadata.merge!(honeycomb_user_metadata)
 
-        if HoneycombRails.config.record_flash?
+        if HoneycombRails.config.record_flash? && respond_to?(:flash)
           flash.each do |k, v|
             metadata[:"flash_#{k}"] = v
           end

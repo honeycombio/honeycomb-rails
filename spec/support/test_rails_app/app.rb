@@ -17,6 +17,9 @@ class TestApp < Rails::Application
   routes.append do
     get '/hello', to: 'hello#show'
     get '/explode', to: 'hello#explode'
+
+    get '/api/hello', to: 'hello_api#show'
+    get '/api/explode', to: 'hello_api#explode'
   end
 
   initializer :configure_honeycomb_rails do
@@ -30,6 +33,8 @@ class HelloController < ActionController::Base
   class Explosion < RuntimeError; end
 
   def show
+    honeycomb_metadata[:greetee] = 'world'
+
     if Rails::VERSION::MAJOR < 4
       render text: 'Hello world!'
     else
@@ -39,5 +44,20 @@ class HelloController < ActionController::Base
 
   def explode
     raise Explosion, 'kaboom!'
+  end
+end
+
+if Rails::VERSION::MAJOR >= 5
+  class HelloApiController < ActionController::API
+    class Explosion < RuntimeError; end
+
+    def show
+      honeycomb_metadata[:greetee] = 'world'
+      render json: {status: 'ok', greeting: 'Hello world!'}
+    end
+
+    def explode
+      raise Explosion, 'kaboom!'
+    end
   end
 end
