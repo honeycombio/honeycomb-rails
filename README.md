@@ -2,6 +2,8 @@
 
 Easily instrument your Rails apps with [Honeycomb](https://honeycomb.io).
 
+Requires Ruby 2.2+ and Rails 3+.  Sign up for a [Honeycomb trial](https://ui.honeycomb.io/signup) to obtain an API key before starting.
+
 ## Getting started
 
 Add the following to your Gemfile:
@@ -14,7 +16,7 @@ Then create a file in your application repo called `config/initializers/honeycom
 
 ```ruby
 HoneycombRails.configure do |conf|
-  conf.writekey = 'your honeycomb writekey here'
+  conf.writekey = 'your honeycomb API key here'
   conf.dataset = 'your app name'
   conf.db_dataset = 'your app name-activerecord'
 end
