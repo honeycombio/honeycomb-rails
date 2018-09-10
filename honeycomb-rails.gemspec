@@ -30,6 +30,9 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'yard'
 
 
+  gem.required_ruby_version = '>= 2.2.0'
+
+
   gem.files = Dir[*%w(
       lib/**/*
       README*)] & %x{git ls-files -z}.split("\0")
