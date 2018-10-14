@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
   gem.license = 'MIT'
 
 
-  gem.add_dependency 'libhoney', '>= 1.8.1'
+  gem.add_dependency 'libhoney', '>= 1.9'
   gem.add_dependency 'rails', '>= 3.0.0'
 
   gem.add_development_dependency 'bump'
