@@ -23,10 +23,10 @@ module HoneycombRails
         event = ActiveSupport::Notifications::Event.new(*args)
         data = event.payload.slice(:name, :connection_id)
         data[:sql] = event.payload[:sql].strip
-        event.payload[:binds].each do |b|
+        event.payload[:binds].each_with_index do |b, i|
           case b
           when Array
-            data["bind_#{ b[0].name }".to_sym] = b[1]
+            data["bind_#{ b[0].nil? ? i : b[0].name }".to_sym] = b[1]
           else
             data["bind_#{ b.name }".to_sym] = b.value
           end
