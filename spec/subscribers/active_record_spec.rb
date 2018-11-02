@@ -54,6 +54,19 @@ RSpec.describe HoneycombRails::Subscribers::ActiveRecord do
     expect(fakehoney.events[0].data).to include(:local_stack)
   end
 
+  it 'handles nil `binds`' do
+    sql = 'UPDATE "users.*" SET "users"."name" = "foo" WHERE ID = 1'
+    subject.call(
+      'sql.active_record',
+      Time.now,
+      Time.now + 1,
+      'abcdef0123456',
+      { sql: sql }
+    )
+
+    expect(fakehoney.events[0].data).to include(sql: /UPDATE /)
+  end
+
   describe 'sample_rate' do
     after { HoneycombRails.reset_config_to_default! }
 
